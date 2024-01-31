@@ -1,0 +1,20 @@
+name: Generate Word Doc
+
+on: push
+
+jobs:
+  convert_via_pandoc:
+    runs-on: ubuntu-20.04
+    container: 
+      image: pandoc/latex:latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: run pandoc
+        run: sh ./run-pandoc.sh
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Word Doc
+          path: "cosmos-db-openai-nodejs-dev-guide.docx"
