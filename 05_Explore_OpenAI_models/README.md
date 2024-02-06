@@ -64,6 +64,6 @@ The `key` and `endpoint` necessary to make API calls to Azure OpenAI can be loca
 
 ## Lab: Explore and use Azure OpenAI models from code
 
-This labs demonstrates using an Azure OpenAI model to obtain a completion response using Python.
+This labs demonstrates using an Azure OpenAI model to obtain a completion response using Node.js.
 
 Visit the lab repository to complete [this lab](https://github.com/solliancenet/cosmos-db-openai-nodejs-dev-guide-labs/blob/main/lab_0_explore_and_use_models.ipynb).

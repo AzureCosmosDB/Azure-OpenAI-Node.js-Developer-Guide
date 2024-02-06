@@ -46,12 +46,13 @@ Some highlights from the lab include:
 
 ### Instantiating an AzureOpenAI client
 
-```python
-# Instantiate an AzureOpenAI client
-ai_client = AzureOpenAI(
-    azure_endpoint = AOAI_ENDPOINT,
-    api_version = AOAI_API_VERSION,
-    api_key = AOAI_KEY
+```javascript
+const { OpenAIClient, AzureKeyCredential } = require("@azure/openai");
+
+// Instantiate an AzureOpenAI client
+const ai_client = new OpenAIClient(
+    AOAI_ENDPOINT,
+    new AzureKeyCredential(AOAI_KEY)
     )
 ```
 

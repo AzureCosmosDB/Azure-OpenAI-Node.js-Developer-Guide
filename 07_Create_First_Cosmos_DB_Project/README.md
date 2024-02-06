@@ -34,7 +34,7 @@ Retrieve the connection string from the Azure portal by navigating to the Azure 
 
 ## Lab - Create your first Cosmos DB for the MongoDB application
 
-Using a notebook, we'll create a Cosmos DB for the MongoDB application in this lab using the **pymongo** library and the Python language. Both the Azure Cosmos DB Emulator and Azure Cosmos DB account in Azure are supported for completion of this lab.
+Using a notebook, we'll create a Cosmos DB for the MongoDB application in this lab using the **mongodb** library for Node.js. Both the Azure Cosmos DB Emulator and Azure Cosmos DB account in Azure are supported for completion of this lab.
 
 Please visit the lab repository to complete [this lab](https://github.com/solliancenet/cosmos-db-openai-nodejs-dev-guide-labs/blob/main/lab_1_first_application.ipynb).
 
@@ -42,28 +42,28 @@ The following concepts are covered in detail in this lab:
 
 ### Creating a MongoDB database client
 
-The `pymongo` library is used to create a MongoDB database client. The client enables both DDL (data definition language) and DML (data manipulation language) operations.
+The `mongodb` library is used to create a MongoDB database client. The client enables both DDL (data definition language) and DML (data manipulation language) operations.
 
-```python
-client = pymongo.MongoClient(CONNECTION_STRING)
+```javascript
+const client = MongoClient.connect(CONNECTION_STRING);
 ```
 
 ### Creating a database
 
-When using the pymongo client, the creation of a database is automatic when referenced. No specific api calls to create a database are required, if a database already exists, a reference to the database is returned.
+When using the `mongodb` client, the creation of a database is automatic when referenced. No specific api calls to create a database are required, if a database already exists, a reference to the database is returned.
 
 >**Note:**: That the creation of databases and collections are lazy, meaning they will not be created until a document is inserted into a collection.
 
-```python
-db = client.cosmic_works
+```javascript
+const db = client.db('cosmic_works');
 ```
 
 ### Creating a collection
 
 Similar behavior to the creation of a database is experienced when creating a collection. If the collection does not exist, it will be created once a document is inserted into the collection.
 
-```python
-collection = db.products
+```javascript
+const collection = db.collection('products')
 ```
 
 ### Creating a document

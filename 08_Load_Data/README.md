@@ -20,10 +20,9 @@ Please visit the lab repository to complete [this lab](https://github.com/sollia
 
 This lab demonstrates the use of bulk operations to load product, customer, and sales data into Azure Cosmos DB API for MongoDB collections. As an example, the following code snippet inserts product data using the `bulk_write` method allowing for upsert functionality using the `UpdateOne` method:
 
-```python
-# Add product data to database using bulkwrite and updateOne with upsert
-# Get cosmic works product data from github
-product_raw_data = "https://cosmosdbcosmicworks.blob.core.windows.net/cosmic-works-small/product.json"
-product_data = ProductList(items=[Product(**data) for data in requests.get(product_raw_data).json()])
-db.products.bulk_write([ UpdateOne({"_id": prod.id}, {"$set": prod.model_dump(by_alias=True)}, upsert=True) for prod in product_data.items])
+```javascript
+// Add product data to database using bulkwrite and updateOne with upsert
+// Get cosmic works product data from github
+
+/* Javascript snippet here */
 ```
