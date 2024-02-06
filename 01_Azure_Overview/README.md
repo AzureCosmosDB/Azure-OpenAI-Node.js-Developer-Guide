@@ -1,6 +1,6 @@
 # Azure Overview
 
-Millions of customers worldwide trust the Azure platform, and there are over 90,000 Cloud Solution Providers (CSPs) partnered with Microsoft to add extra benefits and services to the Azure platform. By leveraging Azure, organizations can easily modernize their applications, expedite application development, and adapt application requirements to meet the demands of their users.
+Millions of customers worldwide trust the Azure platform, and there are over 90,000 Cloud Solution Providers (CSPs) partnered with Microsoft to add extra benefits and services to the Azure platform. By leveraging Azure, organizations can easily modernize their applications, expedite application development, and adapt application requirements to meet the demands of their users. This section provides an overview of Azure, its services, and recommendations on how to get started.
 
 ## Advantages of choosing Azure
 
@@ -99,7 +99,7 @@ Launch the Cloud Shell in a browser at [https://shell.azure.com](https://shell.a
 
 #### PowerShell Module
 
-The Azure portal and Windows PowerShell can be used for managing Azure Cosmos DB for Mongo DB API. To get started with Azure PowerShell, install the [Azure PowerShell cmdlets](https://learn.microsoft.com/en-us/powershell/module/az.cosmosdb/) for Cosmos DB with the following PowerShell command in an administrator-level PowerShell window:
+The Azure portal and Windows PowerShell can be used for managing Azure Cosmos DB for Mongo DB API. To get started with Azure PowerShell, install the [Azure PowerShell cmdlets](https://learn.microsoft.com/powershell/module/az.cosmosdb/) for Cosmos DB with the following PowerShell command in an administrator-level PowerShell window:
 
 ```PowerShell
 Install-Module -Name Az.CosmosDB

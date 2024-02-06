@@ -1,3 +1,5 @@
-# cosmos-db-openai-nodejs-dev-guide
-Azure Cosmos DB + Azure OpenAI Node.js developer guide
+# Azure Cosmos DB + Azure OpenAI Node.js developer guide
 
+## Architecture Diagram
+
+![Architecture Diagram](06_Provision_Azure_Resources/media/architecture.jpg)
