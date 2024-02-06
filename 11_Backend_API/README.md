@@ -6,6 +6,4 @@ This lab implements a backend API using FastAPI that exposes the LangChain agent
 
 This lab also requires the data provided in the previous lab titled [Load data into Azure Cosmos DB API for MongoDB collections](../08_Load_Data/README.md#lab---load-data-into-azure-cosmos-db-api-for-mongodb-collections) as well as the populated vector index created in the lab titled [Vector Search using vCore-based Azure Cosmos DB for MongoDB](../09_Vector_Search_Cosmos_DB/README.md#lab---use-vector-search-on-embeddings-in-vcore-based-azure-cosmos-db-for-mongodb). Run all cells in both notebooks to prepare the data for use in this lab.
 
->**Note**: It is highly recommended to use a [virtual environment](https://python.land/virtual-environments/virtualenv) for all labs.
-
-Please visit the lab repository to complete [this lab](https://github.com/solliancenet/cosmos-db-openai-python-dev-guide-labs/blob/main/lab_4_langchain.ipynb).
+Please visit the lab repository to complete [this lab](https://github.com/solliancenet/cosmos-db-openai-nodejs-dev-guide-labs/blob/main/lab_4_langchain.ipynb).

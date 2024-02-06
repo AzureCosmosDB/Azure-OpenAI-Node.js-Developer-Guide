@@ -66,6 +66,4 @@ The `key` and `endpoint` necessary to make API calls to Azure OpenAI can be loca
 
 This labs demonstrates using an Azure OpenAI model to obtain a completion response using Python.
 
->**Note**: It is highly recommended to use a [virtual environment](https://python.land/virtual-environments/virtualenv) for all labs.
-
-Visit the lab repository to complete [this lab](https://github.com/solliancenet/cosmos-db-openai-python-dev-guide-labs/blob/main/lab_0_explore_and_use_models.ipynb).
+Visit the lab repository to complete [this lab](https://github.com/solliancenet/cosmos-db-openai-nodejs-dev-guide-labs/blob/main/lab_0_explore_and_use_models.ipynb).

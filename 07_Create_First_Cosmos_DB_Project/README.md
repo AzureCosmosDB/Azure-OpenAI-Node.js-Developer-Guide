@@ -36,9 +36,7 @@ Retrieve the connection string from the Azure portal by navigating to the Azure 
 
 Using a notebook, we'll create a Cosmos DB for the MongoDB application in this lab using the **pymongo** library and the Python language. Both the Azure Cosmos DB Emulator and Azure Cosmos DB account in Azure are supported for completion of this lab.
 
->**Note**: It is highly recommended to use a [virtual environment](https://python.land/virtual-environments/virtualenv) for all labs.
-
-Please visit the lab repository to complete [this lab](https://github.com/solliancenet/cosmos-db-openai-python-dev-guide-labs/blob/main/lab_1_first_application.ipynb).
+Please visit the lab repository to complete [this lab](https://github.com/solliancenet/cosmos-db-openai-nodejs-dev-guide-labs/blob/main/lab_1_first_application.ipynb).
 
 The following concepts are covered in detail in this lab:
 
