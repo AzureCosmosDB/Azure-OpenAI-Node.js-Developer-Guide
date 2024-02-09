@@ -23,4 +23,5 @@ pandoc -f markdown --toc \
     "./09_Vector_Search_Cosmos_DB/README.md" \
     "./10_LangChain/README.md" \
     "./11_Backend_API/README.md" \
-    "./12_User_Interface/README.md"
+    "./12_User_Interface/README.md" \
+    "./13_Conclusion/README.md"
