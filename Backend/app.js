@@ -27,6 +27,7 @@ app.get('/', (req, res) => {
  *         description: Returns the OpenAI response.
  */
 app.get('/ai', (req, res) => {
+    const CosmicWorksAIAgent = require('./cosmic_works/cosmic_works_ai_agent');
     res.status(301).send()
 })
 
