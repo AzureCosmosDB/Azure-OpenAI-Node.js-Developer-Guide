@@ -1,3 +1,3 @@
 npm install
 
-node app.js
+node --env-file=.env app.js
