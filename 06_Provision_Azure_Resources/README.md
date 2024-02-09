@@ -8,14 +8,14 @@ As the guide walks you through the concepts of integrating vCore-based Azure Cos
   - ChatGPT-3.5 `completions` model
   - text-embedding-ada-002 model `embeddings` model
 - Azure App Service - for hosting the front-end, static SPA web application written in React
-- Azure Container App - for hosting the back-end, API application written in Node.js
+- Azure Container App - for hosting the back-end, Node.js API application written in JavaScript
 - Azure Container Registry - to host Docker images of backend, API application
 
 ## Architecture Diagram
 
 ![Solution architecture diagram showing how the Azure services deployed are connected](media/architecture.jpg)
 
-Once the Azure resources are provisioned, this guide will walk you through everything that is necessary to build the Back-end API application written in Node.js.
+Once the Azure resources are provisioned, this guide will walk you through everything that is necessary to build the Node.js Back-end API application.
 
 The Front-end Web App is a static SPA application written in React. Since React is outside the scope of this guide, the Front-end Web App is pre-built for you and will be configured automatically on deployment. You do not need any experience with React in order to complete the labs in this guide.
 

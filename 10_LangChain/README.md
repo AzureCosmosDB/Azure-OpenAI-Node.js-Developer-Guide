@@ -30,108 +30,34 @@ Some highlights of the lab include:
 
 ### Instantiating a vector store reference
 
-```python
-vector_store = AzureCosmosDBVectorSearch.from_connection_string(
-    connection_string = CONNECTION_STRING,
-    namespace = "cosmic_works.products",
-    embedding = embedding_model,
-    index_name = "VectorSearchIndex",    
-    embedding_key = "contentVector",
-    text_key = "_id"
-)
+```javascript
+//Coming soon
 ```
 
 ### Composing a reusable RAG chain
 
-```python
-# Create a retriever from the vector store
-retriever = vector_store.as_retriever()
-
-# Create the prompt template from the system_prompt text
-llm_prompt = PromptTemplate.from_template(system_prompt)
-
-rag_chain = (
-    # populate the tokens/placeholders in the llm_prompt 
-    # products takes the results of the vector store and formats the documents
-    # question is a passthrough that takes the incoming question
-    { "products": retriever | format_docs, "question": RunnablePassthrough()}
-    | llm_prompt
-    # pass the populated prompt to the language model
-    | llm
-    # return the string ouptut from the language model
-    | StrOutputParser()
-)
+```javascript
+//Coming soon
 ```
 
 ### Creating tools for LangChain agents to use
 
 Tools are selected by the Large Language model at runtime. In this case, depending on the incoming user request the LLM will decide which collection in the database to query. The following code shows how to create a tool for the LLM to use to query the products collection in the database.
 
-```python
-# create a chain on the retriever to format the documents as JSON
-products_retriever_chain = products_retriever | format_docs
-
-tools = [
-    Tool(
-        name = "vector_search_products", 
-        func = products_retriever_chain.invoke,
-        description = "Searches Cosmic Works product information for similar products based on the question. Returns the product information in JSON format."
-    )
-]
+```javascript
+//Coming soon
 ```
 
 ### Creating tools that call Python functions
 
 Users may query for information that does not have a semantic meaning, such as an ID GUID value or a SKU number. Providing agents with tools to call Python functions to retrieve documents based on these fields is a common practice. The following is an example of adding tools that call out to Python functions for the products collection.
 
-```python
-db = pymongo.MongoClient(CONNECTION_STRING).cosmic_works
-
-def get_product_by_id(product_id: str) -> str:
-    """
-    Retrieves a product by its ID.    
-    """
-    doc = db.products.find_one({"_id": product_id})    
-    if "contentVector" in doc:
-        del doc["contentVector"]
-    return json.dumps(doc)
-
-def get_product_by_sku(sku: str) -> str:
-    """
-    Retrieves a product by its sku.
-    """
-    doc = db.products.find_one({"sku": sku})
-    if "contentVector" in doc:
-        del doc["contentVector"]
-    return json.dumps(doc, default=str)
-
-from langchain.tools import StructuredTool
-
-tools.extend([
-    StructuredTool.from_function(get_product_by_id),
-    StructuredTool.from_function(get_product_by_sku),
-    StructuredTool.from_function(get_sales_by_id)
-])
+```javascript
+//Coming soon
 ```
 
 ### Creating an agent armed with tools for vector search and Python functions calling
 
-```python
-system_message = SystemMessage(
-    content = """
-        You are a helpful, fun and friendly sales assistant for Cosmic Works, a bicycle and bicycle accessories store.
-
-        Your name is Cosmo.
-
-        You are designed to answer questions about the products that Cosmic Works sells, the customers that buy them, and the sales orders that are placed by customers.
-
-        If you don't know the answer to a question, respond with "I don't know."
-        
-        Only answer questions related to Cosmic Works products, customers, and sales orders.
-        
-        If a question is not related to Cosmic Works products, customers, or sales orders,
-        respond with "I only answer questions about Cosmic Works"
-    """    
-)
-agent_executor = create_conversational_retrieval_agent(llm, tools, system_message = system_message, verbose=True)
+```javascript
+//Coming soon
 ```

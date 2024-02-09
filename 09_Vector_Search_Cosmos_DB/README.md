@@ -26,7 +26,7 @@ It is common practice to store vectorized data in a dedicated vector store as ve
 
 ## Lab - Use vector search on embeddings in vCore-based Azure Cosmos DB for MongoDB
 
-In this lab, a notebook demonstrates how to add an embedding field to a document, create a vector search index, and perform a vector search query. The notebook ends with a demonstration of utilizing vector search with an LLM in a RAG scenario using Azure OpenAI.
+In this lab, we'll demonstrate how to add an embedding field to a document, create a vector search index, and perform a vector search query. The lab ends with a demonstration of utilizing vector search with an LLM in a RAG scenario using Azure OpenAI.
 
 This lab requires the Azure OpenAI endpoint and access key to be added to the settings (`.env`) file. Access this information by opening [Azure OpenAI Studio](https://oai.azure.com/portal) and selecting the **Gear**/Settings icon located to the right in the top toolbar.
 
@@ -75,108 +75,26 @@ def generate_embeddings(text: str):
 
 The lab creates an embedding field named `contentVector` in each collection and populates the value with the vectorized text of the JSON representation of the document.
 
-```python
-def add_collection_content_vector_field(collection_name: str):
-    '''
-    Add a new field to the collection to hold the vectorized content of each document.
-    '''
-    collection = db[collection_name]
-    bulk_operations = []
-    for doc in collection.find():
-        # remove any previous contentVector embeddings
-        if "contentVector" in doc:
-            del doc["contentVector"]
-
-        # generate embeddings for the document string representation
-        content = json.dumps(doc, default=str)
-        content_vector = generate_embeddings(content)       
-        
-        bulk_operations.append(pymongo.UpdateOne(
-            {"_id": doc["_id"]},
-            {"$set": {"contentVector": content_vector}},
-            upsert=True
-        ))
-    # execute bulk operations
-    collection.bulk_write(bulk_operations)
+```javascript
+//Coming soon
 ```
 
 ### Creating a vector search index
 
 Enabling vector search on the `contentVector` field in the collection.
 
-```python
-# Create the products vector index
-db.command({
-  'createIndexes': 'products',
-  'indexes': [
-    {
-      'name': 'VectorSearchIndex',
-      'key': {
-        "contentVector": "cosmosSearch"
-      },
-      'cosmosSearchOptions': {
-        'kind': 'vector-ivf',
-        'numLists': 1,
-        'similarity': 'COS',
-        'dimensions': 1536
-      }
-    }
-  ]
-})
+```javascript
+//Coming soon
 ```
 
 ### Performing a vector search query
 
-```python
-def vector_search(collection_name, query, num_results=3):
-    """
-    Perform a vector search on the specified collection by vectorizing
-    the query and searching the vector index for the most similar documents.
-
-    returns a list of the top num_results most similar documents
-    """
-    collection = db[collection_name]
-    query_embedding = generate_embeddings(query)    
-    pipeline = [
-        {
-            '$search': {
-                "cosmosSearch": {
-                    "vector": query_embedding,
-                    "path": "contentVector",
-                    "k": num_results
-                },
-                "returnStoredSource": True }},
-        {'$project': { 'similarityScore': { '$meta': 'searchScore' }, 'document' : '$$ROOT' } }
-    ]
-    results = collection.aggregate(pipeline)
-    return results
+```javascript
+//Coming soon
 ```
 
 ### Using vector search results with an LLM in a RAG scenario
 
-```python
-def rag_with_vector_search(question: str, num_results: int = 3):
-    """
-    Use the RAG model to generate a prompt using vector search results based on the
-    incoming question.  
-    """
-    # perform the vector search and build product list
-    results = vector_search("products", question, num_results=num_results)
-    product_list = ""
-    for result in results:
-        if "contentVector" in result["document"]:
-            del result["document"]["contentVector"]
-        product_list += json.dumps(result["document"], indent=4, default=str) + "\n\n"
-
-    # generate prompt for the LLM with vector results
-    formatted_prompt = system_prompt + product_list
-
-    # prepare the LLM request
-    messages = [
-        {"role": "system", "content": formatted_prompt},
-        {"role": "user", "content": question}
-    ]
-
-    completion = ai_client.chat.completions.create(messages=messages, model=COMPLETIONS_DEPLOYMENT_NAME)
-    return completion.choices[0].message.content
+```javascript
+//Coming soon
 ```

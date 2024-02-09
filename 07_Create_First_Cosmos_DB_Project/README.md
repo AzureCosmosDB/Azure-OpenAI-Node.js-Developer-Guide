@@ -1,6 +1,6 @@
 # Create your first Cosmos DB project
 
-This section will cover how to create your first Cosmos DB project. We'll use a notebook to demonstrate the basic CRUD operations. We'll also cover using the Azure Cosmos DB Emulator to test code locally.
+This section will cover how to create your first Cosmos DB project. We'll create a simple application to demonstrate the basic CRUD operations. We'll also cover using the Azure Cosmos DB Emulator to test code locally.
 
 ## Emulator support
 
@@ -34,7 +34,7 @@ Retrieve the connection string from the Azure portal by navigating to the Azure 
 
 ## Lab - Create your first Cosmos DB for the MongoDB application
 
-Using a notebook, we'll create a Cosmos DB for the MongoDB application in this lab using the **mongodb** library for Node.js. Both the Azure Cosmos DB Emulator and Azure Cosmos DB account in Azure are supported for completion of this lab.
+In this lab, we'll create a Cosmos DB for the MongoDB application using the **mongodb** NPM package that includes the MongoDB Node.js Driver and its dependencies. Both the Azure Cosmos DB Emulator and Azure Cosmos DB account in Azure are supported for completion of this lab.
 
 Please visit the lab repository to complete [this lab](https://github.com/solliancenet/cosmos-db-openai-nodejs-dev-guide-labs/blob/main/lab_1_first_application.ipynb).
 
@@ -42,10 +42,10 @@ The following concepts are covered in detail in this lab:
 
 ### Creating a MongoDB database client
 
-The `mongodb` library is used to create a MongoDB database client. The client enables both DDL (data definition language) and DML (data manipulation language) operations.
+The `mongodb` NPM package is used to create a MongoDB database client. The client enables both DDL (data definition language) and DML (data manipulation language) operations.
 
 ```javascript
-const client = MongoClient.connect(CONNECTION_STRING);
+//Coming soon
 ```
 
 ### Creating a database
@@ -55,7 +55,7 @@ When using the `mongodb` client, the creation of a database is automatic when re
 >**Note:**: That the creation of databases and collections are lazy, meaning they will not be created until a document is inserted into a collection.
 
 ```javascript
-const db = client.db('cosmic_works');
+//Coming soon
 ```
 
 ### Creating a collection
@@ -63,52 +63,45 @@ const db = client.db('cosmic_works');
 Similar behavior to the creation of a database is experienced when creating a collection. If the collection does not exist, it will be created once a document is inserted into the collection.
 
 ```javascript
-const collection = db.collection('products')
+//Coming soon
 ```
 
 ### Creating a document
 
 The `insert_one` method is used to insert a document into a collection. The document is a dictionary object.
 
-```python
-# Insert the JSON into the database, and retrieve the inserted/generated ID
-product_id = collection.insert_one(product_json).inserted_id
+```javascript
+//Coming soon
 ```
 
 ### Reading a document
 
 The `find_one` method is used to retrieve a single document from a collection. The method returns a dictionary object.
 
-```python
-retrieved_document = collection.find_one({"_id": product_id})
+```javascript
+//Coming soon
 ```
 
 ### Updating a document
 
 The `find_one_and_update` method is used to update a single document in a collection. The method returns a dictionary object.
 
-```python
-update_result = collection.find_one_and_update(
-    {"_id": product_id},
-    {"$set": {"name": retrieved_product.name}},
-    return_document=pymongo.ReturnDocument.AFTER
-)
+```javascript
+//Coming soon
 ```
 
 ### Deleting a document
 
 The `delete_one` method is used to delete a single document from a collection.
 
-```python
-delete_result = collection.delete_one({"_id": product_id})
+```javascript
+//Coming soon
 ```
 
 ### Querying documents
 
 The `find` method is used to query documents from a collection. The method returns a cursor object.
 
-```python
-# Print all documents that have a category name of "Components, Saddles"
-for result in collection.find({"categoryName": "Components, Saddles"}):
-    pprint(result)
+```javascript
+//Coming soon
 ```
