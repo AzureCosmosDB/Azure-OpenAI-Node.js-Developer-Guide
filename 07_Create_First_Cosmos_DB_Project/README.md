@@ -32,11 +32,11 @@ Retrieve the connection string from the Azure portal by navigating to the Azure 
 
 ![The Azure CosmosDb API for MongoDB Connection strings screen displays with the copy button next to the connection string highlighted.](media/azure_connection_string.png)
 
-## Lab - Create your first Cosmos DB for the MongoDB application
+## Lab - Create your first Cosmos DB for MongoDB application
 
 In this lab, we'll create a Cosmos DB for the MongoDB application using the **mongodb** NPM package that includes the MongoDB Node.js Driver and its dependencies. Both the Azure Cosmos DB Emulator and Azure Cosmos DB account in Azure are supported for completion of this lab.
 
-Please visit the lab repository to complete [this lab](https://github.com/solliancenet/cosmos-db-openai-nodejs-dev-guide-labs/blob/main/lab_1_first_application.ipynb).
+Please visit the lab repository to complete [this lab](https://github.com/solliancenet/cosmos-db-openai-nodejs-dev-guide-labs/blob/main/first_cosmos_db_application/README.md).
 
 The following concepts are covered in detail in this lab:
 
@@ -45,7 +45,7 @@ The following concepts are covered in detail in this lab:
 The `mongodb` NPM package is used to create a MongoDB database client. The client enables both DDL (data definition language) and DML (data manipulation language) operations.
 
 ```javascript
-//Coming soon
+const client = new MongoClient(process.env.MONGODB_URI);
 ```
 
 ### Creating a database
@@ -55,7 +55,7 @@ When using the `mongodb` client, the creation of a database is automatic when re
 >**Note:**: That the creation of databases and collections are lazy, meaning they will not be created until a document is inserted into a collection.
 
 ```javascript
-//Coming soon
+const db = client.db('cosmic_works');
 ```
 
 ### Creating a collection
@@ -63,45 +63,49 @@ When using the `mongodb` client, the creation of a database is automatic when re
 Similar behavior to the creation of a database is experienced when creating a collection. If the collection does not exist, it will be created once a document is inserted into the collection.
 
 ```javascript
-//Coming soon
+const products = db.collection('products');
 ```
 
 ### Creating a document
 
-The `insert_one` method is used to insert a document into a collection. The document is a dictionary object.
+The `insertOne` method is used to insert a document into a collection. The document is a product document.
 
 ```javascript
-//Coming soon
+const result = await products.insertOne(product);
 ```
 
 ### Reading a document
 
-The `find_one` method is used to retrieve a single document from a collection. The method returns a dictionary object.
+The `findOne` method is used to retrieve a single document from a collection. The method returns the product document.
 
 ```javascript
-//Coming soon
+const product = await products.findOne({ _id: '2BA4A26C-A8DB-4645-BEB9-F7D42F50262E' });
 ```
 
 ### Updating a document
 
-The `find_one_and_update` method is used to update a single document in a collection. The method returns a dictionary object.
+The `findOneAndUpdate` method is used to update a single document in a collection. The method returns the updated document object.
 
 ```javascript
-//Coming soon
+const options = { returnDocument: 'after' };
+const updated = await products.findOneAndUpdate(
+    { _id: '2BA4A26C-A8DB-4645-BEB9-F7D42F50262E' },
+    { $set: { price: 14242.42 } },
+    options);
 ```
 
 ### Deleting a document
 
-The `delete_one` method is used to delete a single document from a collection.
+The `deleteOne` method is used to delete a single document from a collection.
 
 ```javascript
-//Coming soon
+const result = await products.deleteOne({ _id: '2BA4A26C-A8DB-4645-BEB9-F7D42F50262E' });
 ```
 
 ### Querying documents
 
-The `find` method is used to query documents from a collection. The method returns a cursor object.
+The `find` method is used to query documents from a collection. The method returns a cursor object that can be converted to an array using the `toArray` method.
 
 ```javascript
-//Coming soon
+const allProducts = await products.find({}).toArray();
 ```
