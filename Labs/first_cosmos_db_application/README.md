@@ -2,7 +2,7 @@
 
 This lab demonstrates the creation of a Cosmos DB for MongoDB application. The lab will cover creating a database client and using that client to create a database, collection, and documents. The lab will also cover querying for documents and updating and deleting documents.
 
-## Create a MongoDB client and connecting to the Cosmos DB for MongoDB API service
+## Create a MongoDB client and connect to the Cosmos DB for MongoDB API service
 
 1. In the lab folder, create a `.env` file and add the following environment variables, replace `<mongodb_uri>` with your Cosmos DB for MongoDB API service connection string:
 
