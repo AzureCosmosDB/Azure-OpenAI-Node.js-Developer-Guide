@@ -1,6 +1,6 @@
 # Load data into Azure Cosmos DB API for MongoDB
 
-The previous lab demonstrated how to add data to a collection individually. This lab will demonstrate how to load data using bulk operations into multiple collections. This data will be used in subsequent labs to explain further the capabilities of Azure Cosmos DB API for MongoDB about AI.
+The previous lab demonstrated how to add data to a collection individually. This lab will demonstrate how to load data using bulk operations into multiple collections. This data will be used in subsequent labs to explain further the capabilities of Azure Cosmos DB API for MongoDB with respect to AI.
 
 When loading data, bulk operations are preferred over adding each document individually. Bulk operations involve performing multiple database operations as a batch rather than executing them simultaneously. This approach is more efficient and provides several benefits:
 
@@ -16,13 +16,22 @@ When loading data, bulk operations are preferred over adding each document indiv
 
 This lab will load the Cosmic Works Customer, Product, and Sales data into Azure Cosmos DB API for MongoDB collections using bulk operations. Both the Azure Cosmos DB Emulator and Azure Cosmos DB account in Azure are supported for completion of this lab.
 
-Please visit the lab repository to complete [this lab](https://github.com/solliancenet/cosmos-db-openai-nodejs-dev-guide-labs/blob/main/lab_2_load_data.ipynb).
+Please visit the lab repository to complete [this lab](hhttps://github.com/solliancenet/cosmos-db-openai-nodejs-dev-guide-labs/tree/main/load_data).
 
-This lab demonstrates the use of bulk operations to load product, customer, and sales data into Azure Cosmos DB API for MongoDB collections. As an example, the following code snippet inserts product data using the `bulk_write` method allowing for upsert functionality using the `UpdateOne` method:
+This lab demonstrates the use of bulk operations to load product, customer, and sales data into Azure Cosmos DB API for MongoDB collections. As an example, the following code snippet inserts product data using the `bulkWrite` method allowing for insert functionality using the `InsertOne` operation. The bulkWrite method is used to perform multiple write operations in a single batch, write operations can include a mixture of insert, update, and delete operations:
 
 ```javascript
-// Add product data to database using bulkwrite and updateOne with upsert
-// Get cosmic works product data from github
+var result = await productCollection.bulkWrite(
+        productData.map((product) => ({
+            insertOne: {
+                document: product
+            }
+        }))
+    );
+```
 
-/* Javascript snippet here */
+The lab continues with bulk loading customer and sales data, this time with the `insertMany` method. The insertMany method is used to insert multiple documents into a collection, it differs from the bulkWrite method in that it only supports insert operations. The following code snippet demonstrates the use of the simplified `insertMany` method to insert customer data:
+
+```javascript
+var result = await customerCollection.insertMany(customerData);
 ```
