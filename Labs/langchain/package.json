@@ -1,7 +1,7 @@
 {  
-  "name": "mongodb-nodejs-devguide-vector-search",  
+  "name": "mongodb-nodejs-devguide-langchain",  
   "version": "1.0.0",  
-  "description": "A Node.js application performs vector searches and RAG pattern LLM calls.",
+  "description": "A Node.js application that uses LangChain to perform RAG search and function calling.",
   "main": "index.js",  
   "scripts": {  
     "start": "node index.js"  

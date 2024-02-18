@@ -15,7 +15,7 @@ async function main() {
         // Load the product data from the raw data from Cosmic Works while also removing the system properties
         const productRawData = "https://cosmosdbcosmicworks.blob.core.windows.net/cosmic-works-small/product.json";
         const productData = (await (await fetch(productRawData)).json())
-                                .map(prod => removePropertiesStartingWithUnderscore(prod));
+                                .map(prod => cleanData(prod));
         // Delete all existing products and insert the new data
         await productCollection.deleteMany({});
         // Utilize bulkWrite to insert all the products at once
@@ -34,7 +34,7 @@ async function main() {
         const salesCollection = db.collection('sales');
         const custSalesRawData = "https://cosmosdbcosmicworks.blob.core.windows.net/cosmic-works-small/customer.json";
         const custSalesData = (await (await fetch(custSalesRawData)).json())
-                                .map(custSales => removePropertiesStartingWithUnderscore(custSales));   
+                                .map(custSales => cleanData(custSales));   
         
         console.log("Split customer and sales data");
         const customerData = custSalesData.filter(cust => cust["type"] === "customer");
@@ -49,7 +49,6 @@ async function main() {
         await salesCollection.deleteMany({});
         result = await salesCollection.insertMany(salesData);
         console.log(`${result.insertedCount} sales inserted`);
-
         
     } catch (err) {
         console.error(err);
@@ -59,10 +58,14 @@ async function main() {
     }
 }
 
-function removePropertiesStartingWithUnderscore(obj) {  
-    return Object.fromEntries(  
-      Object.entries(obj).filter(([key, _]) => !key.startsWith('_'))  
-    );  
+function cleanData(obj) {
+    cleaned =  Object.fromEntries(
+        Object.entries(obj).filter(([key, _]) => !key.startsWith('_'))
+    );
+    //rename id field to _id
+    cleaned["_id"] = cleaned["id"];
+    delete cleaned["id"];
+    return cleaned;
 }  
 
 main().catch(console.error);

@@ -17,11 +17,14 @@ async function main() {
     }
 }
 
-function removePropertiesStartingWithUnderscore(obj) {
-    // Remove the system properties from source data
-    return Object.fromEntries(  
-      Object.entries(obj).filter(([key, _]) => !key.startsWith('_'))  
-    );  
+function cleanData(obj) {
+    cleaned =  Object.fromEntries(
+        Object.entries(obj).filter(([key, _]) => !key.startsWith('_'))
+    );
+    //rename id field to _id
+    cleaned["_id"] = cleaned["id"];
+    delete cleaned["id"];
+    return cleaned;
 }
 
 main().catch(console.error);

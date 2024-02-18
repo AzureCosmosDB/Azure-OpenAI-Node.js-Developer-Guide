@@ -32,7 +32,7 @@ There is more than one option when performing bulk operations in Cosmos DB for M
     // Load the product data from the raw data from Cosmic Works while also removing the system properties
     const productRawData = "https://cosmosdbcosmicworks.blob.core.windows.net/cosmic-works-small/product.json";
     const productData = (await (await fetch(productRawData)).json())
-                            .map(prod => removePropertiesStartingWithUnderscore(prod));
+                            .map(prod => cleanData(prod));
     ```
 
 2. Optionally, append the following code (to the code in the previous step) to delete any existing products in the collection. This helps if the application is run multiple times so there is no duplicates.
@@ -81,7 +81,7 @@ Customer data and sales data are also combined in a single JSON source, some pre
     const salesCollection = db.collection('sales');
     const custSalesRawData = "https://cosmosdbcosmicworks.blob.core.windows.net/cosmic-works-small/customer.json";
     const custSalesData = (await (await fetch(custSalesRawData)).json())
-                            .map(custSales => removePropertiesStartingWithUnderscore(custSales));
+                            .map(custSales => cleanData(custSales));
     ```
 
 2. Split the customer data from the sales data by appending the following code (to the code in the previous step):
