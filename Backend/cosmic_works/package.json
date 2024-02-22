@@ -1,0 +1,5 @@
+{
+    "type": "module",
+    "name": "cosmic_works",
+    "main": "cosmic_works.js"
+}

@@ -10,6 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "@langchain/azure-openai": "^0.0.1",
+    "@langchain/community": "^0.0.32",
+    "cosmic_works": "file:cosmic_works",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0"
   }

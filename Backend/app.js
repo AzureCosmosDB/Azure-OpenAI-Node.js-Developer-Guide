@@ -26,9 +26,13 @@ app.get('/', (req, res) => {
  *       200:
  *         description: Returns the OpenAI response.
  */
-app.get('/ai', (req, res) => {
-    const CosmicWorksAIAgent = require('./cosmic_works/cosmic_works_ai_agent');
-    res.status(301).send()
+app.get('/ai', async (req, res) => {
+    const CosmicWorksAIAgent = await import('cosmic_works');
+    var prompt = req.query.prompt;
+    var session_id = req.query.session_id;
+    var result = CosmicWorksAIAgent(prompt);
+    res.send({ message: result });
+    //res.status(301).send()
 })
 
 swagger(app)
