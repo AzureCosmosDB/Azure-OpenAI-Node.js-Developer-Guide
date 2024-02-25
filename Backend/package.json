@@ -9,9 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@langchain/azure-openai": "^0.0.1",
-    "@langchain/community": "^0.0.32",
-    "cosmic_works": "file:cosmic_works",
+    "mongodb": "6.3.0",
+    "dotenv": "16.4.4",
+    "@azure/openai": "1.0.0-beta.11",
+    "langchain": "0.1.21",
+    "@langchain/community": "0.0.32",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0"
   }

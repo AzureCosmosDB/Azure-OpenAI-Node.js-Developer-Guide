@@ -1,7 +1,9 @@
-const express = require('express')
-const swagger = require('./swagger')
+const express = require('express');
+const swagger = require('./swagger');
+const CosmicWorks = require('./cosmic_works/cosmic_works');  
 
-const app = express()
+const app = express();
+app.use(express.json());
 
 /* Health probe endpoint. */
 /**
@@ -26,17 +28,18 @@ app.get('/', (req, res) => {
  *       200:
  *         description: Returns the OpenAI response.
  */
-app.get('/ai', async (req, res) => {
-    const CosmicWorksAIAgent = await import('cosmic_works');
-    var prompt = req.query.prompt;
-    var session_id = req.query.session_id;
-    var result = CosmicWorksAIAgent(prompt);
-    res.send({ message: result });
-    //res.status(301).send()
+
+app.post('/ai', async (req, res) => {    
+    const agent = new CosmicWorks();
+    var prompt = req.body.prompt;
+    var session_id = req.body.session_id;    
+    var result = await agent.executeAgent(prompt);    
+    res.send({ message: result });    
 })
+
 
 swagger(app)
 
-app.listen(80, () => {
-    console.log('Server started on port 80');
+app.listen(4242, () => {
+    console.log('Server started on port 4242');
 });
