@@ -35,8 +35,8 @@ app.get('/', (req, res) => {
  */
 app.post('/ai', async (req, res) => {
     let agent = {};    
-    var prompt = req.body.prompt;
-    var session_id = req.body.session_id;
+    let prompt = req.body.prompt;
+    let session_id = req.body.session_id;
 
     if(agentInstancesMap.has(session_id)){
         agent = agentInstancesMap.get(session_id);
@@ -45,7 +45,7 @@ app.post('/ai', async (req, res) => {
         agentInstancesMap.set(session_id, agent);
     }
         
-    var result = await agent.executeAgent(prompt);    
+    let result = await agent.executeAgent(prompt);    
     res.send({ message: result });    
 });
 

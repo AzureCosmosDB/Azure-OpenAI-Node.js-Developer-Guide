@@ -162,7 +162,7 @@ class CosmicWorksAIAgent {
 
     // Helper function that executes the agent with user input and returns the string output
     async executeAgent(input) {
-        var returnValue = "";
+        let returnValue = "";
         try {
             await this.dbClient.connect();
             // Invoke the agent with the user input
