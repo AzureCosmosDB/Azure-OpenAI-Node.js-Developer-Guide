@@ -1,9 +1,14 @@
 const express = require('express');
 const swagger = require('./swagger');
-const CosmicWorks = require('./cosmic_works/cosmic_works');  
+const CosmicWorksAIAgent = require('./cosmic_works/cosmic_works_ai_agent');  
 
 const app = express();
 app.use(express.json());
+
+// This map is to store agents and their chat history for each session.
+// This is for demonstration only and should be hydrated by storing these
+// values in a database rather than in-memory.
+let agentInstancesMap = new Map();
 
 /* Health probe endpoint. */
 /**
@@ -28,15 +33,21 @@ app.get('/', (req, res) => {
  *       200:
  *         description: Returns the OpenAI response.
  */
-
-app.post('/ai', async (req, res) => {    
-    const agent = new CosmicWorks();
+app.post('/ai', async (req, res) => {
+    let agent = {};    
     var prompt = req.body.prompt;
-    var session_id = req.body.session_id;    
+    var session_id = req.body.session_id;
+
+    if(agentInstancesMap.has(session_id)){
+        agent = agentInstancesMap.get(session_id);
+    } else {
+        agent = new CosmicWorksAIAgent();
+        agentInstancesMap.set(session_id, agent);
+    }
+        
     var result = await agent.executeAgent(prompt);    
     res.send({ message: result });    
-})
-
+});
 
 swagger(app)
 

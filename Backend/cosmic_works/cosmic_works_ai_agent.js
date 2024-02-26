@@ -5,12 +5,13 @@ const { OpenAIFunctionsAgentOutputParser } = require("langchain/agents/openai/ou
 const { formatToOpenAIFunctionMessages } = require("langchain/agents/format_scratchpad");
 const { DynamicTool } = require("@langchain/core/tools");
 const { RunnableSequence } = require("@langchain/core/runnables");
+const { HumanMessage, AIMessage } = require("@langchain/core/messages");
 const { MessagesPlaceholder, ChatPromptTemplate } = require("@langchain/core/prompts");
 const { convertToOpenAIFunction } = require("@langchain/core/utils/function_calling");
 const { ChatOpenAI, OpenAIEmbeddings } = require("@langchain/openai");
 const { AzureCosmosDBVectorStore } = require("@langchain/community/vectorstores/azure_cosmosdb");
 
-class CosmicWorks {
+class CosmicWorksAIAgent {
     constructor() {
         // set up the MongoDB client
         this.dbClient = new MongoClient(process.env.AZURE_COSMOSDB_CONNECTION_STRING);
@@ -26,6 +27,9 @@ class CosmicWorks {
         this.vectorStore = new AzureCosmosDBVectorStore(new OpenAIEmbeddings(), azureCosmosDBConfig);
         // set up the OpenAI chat model
         this.chatModel = new ChatOpenAI();
+
+        // initialize the chat history
+        this.chatHistory = [];
 
         // initialize the agent executor
         (async () => {
@@ -124,6 +128,7 @@ class CosmicWorks {
         // Input represents the user prompt and agent_scratchpad acts as a log of tool invocations and outputs.
         const prompt = ChatPromptTemplate.fromMessages([
             ["system", systemMessage],
+            new MessagesPlaceholder("chat_history"),
             ["human", "{input}"],
             new MessagesPlaceholder("agent_scratchpad")
         ]);
@@ -135,6 +140,7 @@ class CosmicWorks {
             {
                 input: (i) => i.input,
                 agent_scratchpad: (i) => formatToOpenAIFunctionMessages(i.steps),
+                chat_history: (i) => i.chat_history
             },
             prompt,
             modelWithFunctions,
@@ -148,7 +154,7 @@ class CosmicWorks {
         const executor = AgentExecutor.fromAgentAndTools({
             agent: runnableAgent,
             tools,
-            returnIntermediateSteps: true
+            //returnIntermediateSteps: true
         });
 
         return executor;
@@ -160,7 +166,10 @@ class CosmicWorks {
         try {
             await this.dbClient.connect();
             // Invoke the agent with the user input
-            const result = await this.agentExecutor.invoke({ input });
+            const result = await this.agentExecutor.invoke({ input: input, chat_history: this.chatHistory });
+
+            this.chatHistory.push(new HumanMessage(input));
+            this.chatHistory.push(new AIMessage(result.output));
 
             // Output the intermediate steps of the agent if returnIntermediateSteps is set to true
             if (this.agentExecutor.returnIntermediateSteps) {
@@ -175,4 +184,4 @@ class CosmicWorks {
     }
 };
 
-module.exports = CosmicWorks;
+module.exports = CosmicWorksAIAgent;
