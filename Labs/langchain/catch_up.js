@@ -35,31 +35,8 @@ async function main() {
         );
         console.log(`${result.insertedCount} products inserted`);
 
-        // Load customer and sales data
-        console.log('Retrieving combined Customer/Sales data');
-        const customerCollection = db.collection('customers');
-        const salesCollection = db.collection('sales');
-        const custSalesRawData = "https://cosmosdbcosmicworks.blob.core.windows.net/cosmic-works-small/customer.json";
-        const custSalesData = (await (await fetch(custSalesRawData)).json())
-                                .map(custSales => cleanData(custSales));   
-        
-        console.log("Split customer and sales data");
-        const customerData = custSalesData.filter(cust => cust["type"] === "customer");
-        const salesData = custSalesData.filter(sales => sales["type"] === "salesOrder");
-        
-        console.log("Loading customer data");
-        await customerCollection.deleteMany({});
-        result = await customerCollection.insertMany(customerData);
-        console.log(`${result.insertedCount} customers inserted`);
-        
-        console.log("Loading sales data");
-        await salesCollection.deleteMany({});
-        result = await salesCollection.insertMany(salesData);
-        console.log(`${result.insertedCount} sales inserted`);
-
-        await addCollectionContentVectorField(db, 'products');
-        await addCollectionContentVectorField(db, 'customers');
-        await addCollectionContentVectorField(db, 'sales');
+        await addCollectionontentVectorField(db, 'products');
+       
     } catch (err) {
         console.error(err);
     } finally {
