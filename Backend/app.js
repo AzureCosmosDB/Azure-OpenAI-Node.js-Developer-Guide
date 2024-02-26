@@ -1,6 +1,6 @@
 const express = require('express');
 const swagger = require('./swagger');
-const CosmicWorksAIAgent = require('./cosmic_works/cosmic_works_ai_agent');  
+const CosmicWorksAIAgent = require('./cosmic_works/cosmic_works_ai_agent');
 
 const app = express();
 app.use(express.json());
@@ -21,7 +21,7 @@ let agentInstancesMap = new Map();
  *         description: Returns status=ready json
  */
 app.get('/', (req, res) => {
-    res.send({"status": "ready"});
+    res.send({ "status": "ready" });
 });
 
 /**
@@ -34,19 +34,19 @@ app.get('/', (req, res) => {
  *         description: Returns the OpenAI response.
  */
 app.post('/ai', async (req, res) => {
-    let agent = {};    
+    let agent = {};
     let prompt = req.body.prompt;
     let session_id = req.body.session_id;
 
-    if(agentInstancesMap.has(session_id)){
+    if (agentInstancesMap.has(session_id)) {
         agent = agentInstancesMap.get(session_id);
     } else {
         agent = new CosmicWorksAIAgent();
         agentInstancesMap.set(session_id, agent);
     }
-        
-    let result = await agent.executeAgent(prompt);    
-    res.send({ message: result });    
+
+    let result = await agent.executeAgent(prompt);
+    res.send({ message: result });
 });
 
 swagger(app)
