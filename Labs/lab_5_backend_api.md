@@ -27,20 +27,26 @@ When developing a backend api, it is often useful to run the application locally
 3. Setup the `.env` file. Copy the `.env.example` file to `.env` and update the values. These are the same environment variables used in the previous labs.
 
     ```bash
-    cp .env.example .env
+    cp .env.EXAMPLE .env
     ```
 
-6. Run the following command to start the backend api in the virtual environment.
+5. Run the following command to install any dependencies:
 
     ```bash
-    uvicorn --host "0.0.0.0" --port 8000 app:app --reload
+    npm install
     ```
 
-    ![The VSCode terminal window displays with the backend API started.](media/local_backend_running_console.png "Local backend api running")
+6. Run the following command to start the backend api.
 
-7. Open a browser and navigate to `http://localhost:8000/docs` to view the Swagger UI.
+    ```bash
+    node --env-file=.env app.js
+    ```
 
-    ![The Swagger UI displays for the locally running backend api](media/local_backend_swagger_ui.png "Local backend api Swagger UI")
+    ![The VSCode terminal window displays with the backend API started.](images/local_backend_running_console.png.png "Local backend api running")
+
+7. Open a browser and navigate to `http://localhost:4242/docs` to view the Swagger UI.
+
+    ![The Swagger UI displays for the locally running backend api](images/local_backend_swagger_ui.png.png "Local backend api Swagger UI")
 
 8. Expand the **GET / Root** endpoint and select **Try it out**. Select **Execute** to send the request. The response should display a status of `ready`.
 
@@ -70,17 +76,16 @@ The backend api contains a `Dockerfile` that defines the container image and is 
 The `Dockerfile` for the backend api is shown below.
 
 ```dockerfile
-FROM python:3.11
+FROM node:21
 
-WORKDIR /code
-COPY ./requirements.txt /code/requirements.txt
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
-COPY . /code
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm install
+COPY . .
 
-EXPOSE 80
-ENV FORWARDED_ALLOW_IPS *
+EXPOSE 4242
 
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "80", "--forwarded-allow-ips", "*", "--proxy-headers"]
+CMD [ "node", "--env-file=.env", "app.js" ]
 ```
 
 Notice the steps of installing the pip dependencies, and running the **uvicorn** command line similar to what was done in the previous section.
@@ -89,24 +94,18 @@ Notice the steps of installing the pip dependencies, and running the **uvicorn**
 
 2. Open a **Terminal** window in VS Code (<kbd>CTRL</kbd>+<kbd>`</kbd>).
 
-3. If the terminal displays the virtual environment name, deactivate the virtual environment by running the following command.
-
-    ```bash
-    deactivate
-    ```
-
 4. Run the following command to build the container image. Once complete, a message displays the operation has `FINISHED`.
 
     ```bash
-    docker build --pull --rm -f "DOCKERFILE" -t devguidebackendapi:latest "."
+    docker build --pull --rm -f "DOCKERFILE" -t devguidenodebackendapi:latest "."
     ```
 
-    ![The VSCode terminal window displays the docker build command and the FINISHED message.](media/local_backend_docker_build.png "Local backend api Docker build")
+    ![The VSCode terminal window displays the docker build command and the FINISHED message.](images/local_backend_docker_build.png "Local backend api Docker build")
 
 5. Lastly, run the container in Docker Desktop using the following command.
 
     ```bash
-    docker run -d -p 4242:80 --name devguide-backend-api devguidebackendapi:latest
+    docker run -d -p 4242:4242 --name devguide-backend-api devguidenodebackendapi:latest
     ```
 
     ![The VSCode terminal window displays the docker run command.](media/local_backend_docker_run.png "Local backend api Docker run")
@@ -136,7 +135,7 @@ Earlier, the backend api container image was built locally. Now that the ACR log
 2. Run the following command to tag the container image with the ACR login server. Replace the `<login server>` value. This command will silently complete with no output.
 
     ```bash
-    docker tag devguidebackendapi:latest <login server>/devguidebackendapi:v1
+    docker tag devguidenodebackendapi:latest <login server>/devguidenodebackendapi:v1
     ```
 
 3. Run the following command to log into the ACR. Replace the `<login server>`, `<username>`, and `<password>` values. The message `Login Succeeded` displays when the login is successful.
@@ -148,7 +147,7 @@ Earlier, the backend api container image was built locally. Now that the ACR log
 4. Once authenticated, push the container image to the ACR using the following command. Replace the `<login server>` value.
 
     ```bash
-    docker push <login server>/devguidebackendapi:v1
+    docker push <login server>/devguidenodebackendapi:v1
     ```
 
     ![The VSCode terminal window displays the docker login and docker push commands.](media/local_backend_docker_push.png "Local backend api Docker push")
@@ -186,7 +185,7 @@ The last step is to deploy the backend api container image to Azure Container Ap
 8. Run the following command to deploy the backend api container image to the existing Azure Container Apps resource. Replace the `<container app name>`, `<login server>`, `<resource group name>`, and `<container app environment name>` values.
 
     ```bash
-    az containerapp up --name <container app name> --image <login server>/devguidebackendapi:v1 --resource-group <resource group name> --environment <container app environment name> --ingress external
+    az containerapp up --name <container app name> --image <login server>/devguidenodebackendapi:v1 --resource-group <resource group name> --environment <container app environment name> --ingress external
     ```
 
     ![The console output of the container app up command displays with the endpoint highlighted.](media/container_deploy.png)
