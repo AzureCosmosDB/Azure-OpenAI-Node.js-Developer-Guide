@@ -42,11 +42,11 @@ When developing a backend api, it is often useful to run the application locally
     node --env-file=.env app.js
     ```
 
-    ![The VSCode terminal window displays with the backend API started.](images/local_backend_running_console.png.png "Local backend api running")
+    ![The VSCode terminal window displays with the backend API started.](media/local_backend_running_console.png "Local backend api running")
 
 7. Open a browser and navigate to `http://localhost:4242/docs` to view the Swagger UI.
 
-    ![The Swagger UI displays for the locally running backend api](images/local_backend_swagger_ui.png.png "Local backend api Swagger UI")
+    ![The Swagger UI displays for the locally running backend api](media/local_backend_swagger_ui.png "Local backend api Swagger UI")
 
 8. Expand the **GET / Root** endpoint and select **Try it out**. Select **Execute** to send the request. The response should display a status of `ready`.
 
@@ -83,9 +83,9 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 
-EXPOSE 4242
+EXPOSE 80
 
-CMD [ "node", "--env-file=.env", "app.js" ]
+CMD [ "node", "--env-file=.env", "app.js", "port=80" ]
 ```
 
 Notice the steps of installing the pip dependencies, and running the **uvicorn** command line similar to what was done in the previous section.
@@ -100,7 +100,7 @@ Notice the steps of installing the pip dependencies, and running the **uvicorn**
     docker build --pull --rm -f "DOCKERFILE" -t devguidenodebackendapi:latest "."
     ```
 
-    ![The VSCode terminal window displays the docker build command and the FINISHED message.](images/local_backend_docker_build.png "Local backend api Docker build")
+    ![The VSCode terminal window displays the docker build command and the FINISHED message.](media/local_backend_docker_build.png "Local backend api Docker build")
 
 5. Lastly, run the container in Docker Desktop using the following command.
 
@@ -108,7 +108,7 @@ Notice the steps of installing the pip dependencies, and running the **uvicorn**
     docker run -d -p 4242:4242 --name devguide-backend-api devguidenodebackendapi:latest
     ```
 
-    ![The VSCode terminal window displays the docker run command.](media/local_backend_docker_run.png "Local backend api Docker run")
+    ![The VSCode terminal window displays the docker run command.](media//local_backend_docker_run.png "Local backend api Docker run")
 
 6. Open a browser and navigate to `http://localhost:4242/docs` to view the Swagger UI.
 
