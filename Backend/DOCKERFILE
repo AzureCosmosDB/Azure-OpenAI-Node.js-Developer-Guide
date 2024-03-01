@@ -5,6 +5,6 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 
-EXPOSE 4242
+EXPOSE 80
 
-CMD [ "node", "--env-file=.env", "app.js" ]
+CMD [ "node", "--env-file=.env", "app.js", "port=80" ]

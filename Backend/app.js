@@ -51,6 +51,23 @@ app.post('/ai', async (req, res) => {
 
 swagger(app)
 
-app.listen(4242, () => {
-    console.log('Server started on port 4242');
+
+// parse out hosting port from cmd arguments if passed in
+// otherwise default to port 4242
+var port = (() => {
+    const { argv } = require('node:process');
+    var port = 4242; // default
+    if (argv){
+        argv.forEach((v, i) => {
+            if (v && (v.toLowerCase().startsWith('port=')))
+            {
+                port = v.substring(5);
+            }
+        });
+    }
+    return port;
+})();
+
+app.listen(port, () => {
+    console.log(`Server started on port ${port}`);
 });
