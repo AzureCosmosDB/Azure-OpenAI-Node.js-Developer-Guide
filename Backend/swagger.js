@@ -10,12 +10,12 @@ const options = {
       title: 'API',
       version: '0.1.0',
       description: '',
-    },
+    }/*,
     servers: [
       {
         url: 'http://localhost:80',
       },
-    ],
+    ],*/
   },
   apis: ['*.js'],
 }

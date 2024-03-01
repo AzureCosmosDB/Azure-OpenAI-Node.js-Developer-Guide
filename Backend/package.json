@@ -9,11 +9,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "mongodb": "6.3.0",
-    "dotenv": "16.4.4",
     "@azure/openai": "1.0.0-beta.11",
-    "langchain": "0.1.21",
     "@langchain/community": "0.0.32",
+    "cors": "^2.8.5",
+    "dotenv": "16.4.4",
+    "langchain": "0.1.21",
+    "mongodb": "6.3.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0"
   }
