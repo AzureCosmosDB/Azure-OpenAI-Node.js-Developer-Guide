@@ -25,8 +25,16 @@ class CosmicWorksAIAgent {
             textKey: "_id"
         }
         this.vectorStore = new AzureCosmosDBVectorStore(new OpenAIEmbeddings(), azureCosmosDBConfig);
+
         // set up the OpenAI chat model
-        this.chatModel = new ChatOpenAI();
+        // https://js.langchain.com/docs/integrations/chat/azure
+        this.chatModel = new ChatOpenAI({
+            temperature: 0,
+            azureOpenAIApiKey: process.env.AZURE_OPENAI_API_KEY,
+            azureOpenAIApiVersion: process.env.AZURE_OPENAI_API_VERSION,
+            azureOpenAIApiInstanceName: process.env.AZURE_OPENAI_API_INSTANCE_NAME,
+            azureOpenAIApiDeploymentName: process.env.AZURE_OPENAI_API_DEPLOYMENT_NAME
+        });
 
         // initialize the chat history
         this.chatHistory = [];
