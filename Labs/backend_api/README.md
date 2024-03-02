@@ -6,7 +6,7 @@ The information provided in this section assumes that the dependent infrastructu
 
 ## Overview
 
-The backend api is a Python FastAPI application that will expose endpoints for the frontend application to interact with. The backend api is a containerized application that will be deployed to [Azure Container Apps](https://learn.microsoft.com/en-us/azure/container-apps/overview).
+The backend api is a Node.js web application, using Express and Swagger, that will expose endpoints for the frontend application to interact with. The backend api is a containerized application that will be deployed to [Azure Container Apps](https://learn.microsoft.com/en-us/azure/container-apps/overview).
 
 ## Clone the backend repository
 
