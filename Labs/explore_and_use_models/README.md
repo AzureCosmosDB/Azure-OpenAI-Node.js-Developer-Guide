@@ -7,53 +7,49 @@ When integrating Azure OpenAI service in a solution written in Node.js, the Open
 Install the latest openai client library using `npm`:
 
 ```bash
-npm install @langchain/openai
+npm install @azure/openai
 ```
 
 Create a new `app.js` file for the Node.js program, and add the following variable definition using `require` so the app can use the OpenAI library.
 
 ```javascript
-const { ChatOpenAI } = require("@langchain/openai");
+const { OpenAIClient, AzureKeyCredential } = require("@azure/openai");
 ```
 
 ## Chat completions
 
-Create the Azure OpenAi client to call the Azure OpenAI Chat completion API:
+Create the Azure OpenAI client to call the Azure OpenAI Chat completion API:
 
 ```javascript
-const llm = new ChatOpenAI({
-  temperature: 0,
-  azureOpenAIApiInstanceName: "<azure-openai-service-name>",
-  azureOpenAIApiKey: "<azure-openai-key>",
-  azureOpenAIApiVersion: "2023-05-15", 
-  azureOpenAIApiDeploymentName: "completions"
-});
+const client = new OpenAIClient(
+    , //"<azure-openai-service-endpoint",
+    new AzureKeyCredential("bc391df99b50462092a77d5bf1445f44") //"<azure-openai-service-key>")
+    );
 ```
 
-> **Note**: The `azureOpenAIApiVersion` is included to specify the API version for calls to the Azure OpenAI service.
-
-Once the Azure OpenAI client to be used for Chat completion has been created, the next step is to call the `.invoke` method on the client to perform a chat completion.
+Once the Azure OpenAI client to be used for Chat completion has been created, the next step is to call the `.getCompletions` method on the client to perform a chat completion.
 
 ```javascript
-var chatResponse = chatClient.invoke([
-    ["system", "You are a helpful, fun and friendly sales assistant for Cosmic Works, a bicycle and bicycle accessories store."],
-    ["user", "Do you sell bicycles?"],
-    ["assistant", "Yes, we do sell bicycles. What kind of bicycle are you looking for?"],
-    ["user", "I'm not sure what I'm looking for. Could you help me decide?"]
-]);
+const chatResponse = client.getChatCompletions(
+    "completions", // deployment name
+    [
+        {role: "system", content: "You are a helpful, fun and friendly sales assistant for Cosmic Works, a bicycle and bicycle accessories store."},
+        {role: "user", content: "Do you sell bicycles?"},
+        {role: "assistant", content: "Yes, we do sell bicycles. What kind of bicycle are you looking for?"},
+        {role: "user", content: "I'm not sure what I'm looking for. Could you help me decide?"}
+    ]);
 ```
 
-The `.invoke` method returns a Javascript Promise object for asynchronous programming. In this example the next step is to call the `.then` method on the promise, passing it a function that writes the `.content` response string from the Azure OpenAI service to the console.
+The `.getCompletions` method returns a Javascript Promise object for asynchronous programming. In this example the next step is to call the `.then` method on the promise, passing it a function that writes the response from Azure OpenAI to the console.
 
 ```javascript
-chatResponse.then((res) => {
-    var message = res.content;
-    console.log(message);
-});
+chatResponse.then((result) => {
+    for (const choice of result.choices) {
+        console.log(choice.text);
+    }
+}).catch((err) => console.log(`Error: ${err}`));
 ```
 
 The response from the Azure OpenAI service should be similar to the following:
 
 `Of course! I'd be happy to help you find the perfect bicycle. First, let's start with some basic questions. Are you looking for a bike for commuting, mountain biking, road cycling, or something else?`
-
-> **Note**: The [`openai` Node.js library documentation](https://platform.openai.com/docs/guides/text-generation/chat-completions-api?lang=node.js) has further information on making Chat Completion calls to the service.
