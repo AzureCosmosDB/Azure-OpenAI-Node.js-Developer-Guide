@@ -1,4 +1,4 @@
-# Welcome to the Azure Cosmos DB OpenAI Node.js Dev Guide
+# Welcome to the Azure Cosmos DB + Azure OpenAI Node.js Developer Guide
 
 ## Pre-requisites
 
