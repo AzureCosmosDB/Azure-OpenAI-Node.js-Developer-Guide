@@ -36,7 +36,7 @@ Retrieve the connection string from the Azure portal by navigating to the Azure 
 
 In this lab, we'll create a Cosmos DB for the MongoDB application using the **mongodb** NPM package that includes the MongoDB Node.js Driver and its dependencies. Both the Azure Cosmos DB Emulator and Azure Cosmos DB account in Azure are supported for completion of this lab.
 
-Please visit the lab repository to complete [this lab](https://github.com/solliancenet/cosmos-db-openai-nodejs-dev-guide-labs/blob/main/first_cosmos_db_application/README.md).
+Please visit the lab repository to complete [this lab](https://github.com/AzureCosmosDB/Azure-OpenAI-Node.js-Developer-Guide/blob/main/Labs/first_cosmos_db_application/README.md).
 
 The following concepts are covered in detail in this lab:
 

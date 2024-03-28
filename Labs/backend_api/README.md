@@ -8,12 +8,15 @@ The information provided in this section assumes that the dependent infrastructu
 
 The backend api is a Node.js web application, using Express and Swagger, that will expose endpoints for the frontend application to interact with. The backend api is a containerized application that will be deployed to [Azure Container Apps](https://learn.microsoft.com/en-us/azure/container-apps/overview).
 
-## Clone the backend repository
+## Clone the Backend API
 
-Create a folder to house the backend api code. Open a terminal and navigate to the folder. Clone the backend repository.
+Create a folder to house the repository. Open a terminal and navigate to the folder. Clone the repository, then navigate to the `Backend` folder within the repository.
 
 ```bash
-git clone https://github.com/solliancenet/cosmos-db-dev-guide-backend-app-nodejs.git
+git clone https://github.com/AzureCosmosDB/Azure-OpenAI-Node.js-Developer-Guide.git
+
+cd Azure-OpenAI-Node.js-Developer-Guide
+cd Backend
 ```
 
 ## Run the backend api locally
