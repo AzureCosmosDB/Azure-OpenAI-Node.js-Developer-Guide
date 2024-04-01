@@ -62,7 +62,7 @@ The return value of a vector search in LangChain is a list of `Document` objects
 2. Directly beneath the line `const { MongoClient } = require('mongodb');`, add the following code to import the necessary LangChain packages. This code imports the AzureCosmosDBVectorStore that represents the vector index in a collection, the `AzureCosmosDBSimilarityType` that will allow us to perform a vector search using cosine similarity, and the `OpenAIEmbeddings` class that will be used to generate the embeddings for the user's input for the vector search.
 
     ```javascript
-    const { AzureCosmosDBVectorStore
+    const { AzureCosmosDBVectorStore,
         AzureCosmosDBSimilarityType
     } = require("@langchain/community/vectorstores/azure_cosmosdb")
     const { OpenAIEmbeddings } = require("@langchain/openai")
