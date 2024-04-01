@@ -3,11 +3,11 @@ const { MongoClient } = require('mongodb');
 const { OpenAIClient, AzureKeyCredential} = require("@azure/openai");
 
 // set up the MongoDB client
-const dbClient = new MongoClient(process.env.MONGODB_URI);
+const dbClient = new MongoClient(process.env.AZURE_COSMOSDB_CONNECTION_STRING);
 // set up the Azure OpenAI client 
 const embeddingsDeploymentName = "embeddings";
-const aoaiClient = new OpenAIClient(process.env.AOAI_ENDPOINT, 
-                    new AzureKeyCredential(process.env.AOAI_KEY));
+const aoaiClient = new OpenAIClient("https://" + process.env.AZURE_OPENAI_API_INSTANCE_NAME + ".openai.azure.com/", 
+                    new AzureKeyCredential(process.env.AZURE_OPENAI_API_KEY));
 
 async function main() {
     try {
@@ -35,7 +35,7 @@ async function main() {
         );
         console.log(`${result.insertedCount} products inserted`);
 
-        await addCollectionontentVectorField(db, 'products');
+        await addCollectionContentVectorField(db, 'products');
        
     } catch (err) {
         console.error(err);
@@ -110,5 +110,16 @@ async function addCollectionContentVectorField(db, collectionName) {
         console.log(`Vector index already exists on contentVector field in the ${collectionName} collection`);
     }
 }
+
+function cleanData(obj) {
+    cleaned =  Object.fromEntries(
+        Object.entries(obj).filter(([key, _]) => !key.startsWith('_'))
+    );
+    //rename id field to _id
+    cleaned["_id"] = cleaned["id"];
+    delete cleaned["id"];
+    return cleaned;
+}
+
 
 main().catch(console.error);
