@@ -123,7 +123,7 @@ Notice the steps of installing the pip dependencies, and running the **uvicorn**
 5. Lastly, run the container in Docker Desktop using the following command.
 
     ```bash
-    docker run -d -p 4242:4242 --name devguide-backend-api devguidenodebackendapi:latest
+    docker run -d -p 4242:80 --name devguide-backend-api devguidenodebackendapi:latest
     ```
 
     ![The VSCode terminal window displays the docker run command.](media//local_backend_docker_run.png "Local backend api Docker run")
