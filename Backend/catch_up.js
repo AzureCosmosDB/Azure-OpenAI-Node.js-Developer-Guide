@@ -35,7 +35,7 @@ async function main() {
         );
         console.log(`${result.insertedCount} products inserted`);
 
-        await addCollectionontentVectorField(db, 'products');
+        await addCollectionContentVectorField(db, 'products');
        
     } catch (err) {
         console.error(err);
