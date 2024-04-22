@@ -125,7 +125,7 @@ Documents in Cosmos DB API for MongoDB are represented as JSON objects. One meth
 
     ![Console output showing a successful connection, document insertion, and disconnection messages.](media/db_insert_output.png "Database document insertion console output")
 
-3. Return to `index.js` and delete or comment out the code from step 1 of this section. This will ensure that the same record gets re-added each time the application is run.
+3. Return to `index.js` and delete or comment out the code from step 1 of this section. This will ensure that the same record doesn't gets re-added each time the application is run.
 
 ## Read a document
 
@@ -282,6 +282,7 @@ Clean up the items created in this lab by deleting the MongoDB database.
 
     ```javascript
     await db.dropDatabase();
+    console.log("The database has been dropped");
     ```
 
 2. Run the application. In addition to the connectivity messages, the database deletion message will be displayed.
