@@ -16,7 +16,7 @@ When loading data, bulk operations are preferred over adding each document indiv
 
 This lab will load the Cosmic Works Customer, Product, and Sales data into Azure Cosmos DB API for MongoDB collections using bulk operations. Both the Azure Cosmos DB Emulator and Azure Cosmos DB account in Azure are supported for completion of this lab.
 
-Please visit the lab repository to complete [this lab](https://github.com/AzureCosmosDB/Azure-OpenAI-Node.js-Developer-Guide/blob/main/08_Load_Data/README.md).
+Please visit the lab repository to complete [this lab](https://github.com/AzureCosmosDB/Azure-OpenAI-Node.js-Developer-Guide/blob/main/Labs/load_data/README.md).
 
 This lab demonstrates the use of bulk operations to load product, customer, and sales data into Azure Cosmos DB API for MongoDB collections. As an example, the following code snippet inserts product data using the `bulkWrite` method allowing for insert functionality using the `InsertOne` operation. The bulkWrite method is used to perform multiple write operations in a single batch, write operations can include a mixture of insert, update, and delete operations:
 
