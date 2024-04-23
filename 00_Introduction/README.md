@@ -5,7 +5,7 @@
 - [Azure account and subscription](https://azure.microsoft.com/free/) with Owner permissions
 - [Node.js 20.11.0 LTS or newer](https://nodejs.org/)
 - [Visual Studio Code](https://code.visualstudio.com/download)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) with [WSL 2 backend (if on Windows)](https://learn.docker.com/desktop/wsl/)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) with [WSL 2 backend (if on Windows)](https://docs.docker.com/desktop/wsl/)
 - [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli)
 - [Bicep CLI](https://learn.microsoft.com/azure/azure-resource-manager/bicep/install#install-manually)
 - [Powershell](https://learn.microsoft.com/powershell/scripting/install/installing-powershell?view=powershell-7.3)
