@@ -56,7 +56,7 @@ While it can be quick to write basic prompts, it can also be difficult to write 
 ### General anatomy of a prompt
 
 context, input, output indicator
-There are a several components that are used in the anatomy of constructing AI prompts:
+There are several components that are used in the anatomy of constructing AI prompts:
 
 - Input
   - Instructions
