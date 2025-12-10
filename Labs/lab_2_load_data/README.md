@@ -4,15 +4,18 @@ This lab demonstrates bulk loading of data from the Cosmic Works JSON files into
 
 ## Setup the lab environment
 
-1. In the lab folder, create a `.env` file and add the following environment variables, replace `<mongodb_uri>` with your Cosmos DB for MongoDB API service connection string:
+1.
+In the lab folder, create a `.env` file and add the following environment variables, replace `<mongodb_uri>` with your Cosmos DB for MongoDB API service connection string:
 
     ```text
     MONGODB_URI=<mongodb_uri>
     ```
 
-2. In Visual Studio Code, open a terminal window and navigate to the lab folder `load_data`.
+2.
+In Visual Studio Code, open a terminal window and navigate to the lab folder `lab_2_load_data`.
 
-3. Install the required packages by running the following command in the terminal window:
+3.
+Install the required packages by running the following command in the terminal window:
 
     ```bash
     npm install
@@ -20,9 +23,12 @@ This lab demonstrates bulk loading of data from the Cosmic Works JSON files into
 
 ## Bulk load product data
 
-There is more than one option when performing bulk operations in Cosmos DB for MongoDB. In this section, data will be loaded using the `bulkWrite` method. The `bulkWrite` method is used to perform multiple write operations in a single batch, write operations can include a mixture of insert, update, and delete operations.
+There is more than one option when performing bulk operations in Cosmos DB for MongoDB.
+In this section, data will be loaded using the `bulkWrite` method.
+The `bulkWrite` method is used to perform multiple write operations in a single batch, write operations can include a mixture of insert, update, and delete operations.
 
-1. Open the `index.js` file, and directly beneath the `const db = client.db('cosmic_works');` line, add the following code to fetch the product data from the Cosmic Works repository:
+1.
+Open the `index.js` file, and directly beneath the `const db = client.db('cosmic_works');` line, add the following code to fetch the product data from the Cosmic Works repository:
 
     ```javascript
     // Load product data
@@ -35,7 +41,9 @@ There is more than one option when performing bulk operations in Cosmos DB for M
                             .map(prod => cleanData(prod));
     ```
 
-2. Optionally, append the following code (to the code in the previous step) to delete any existing products in the collection. This helps if the application is run multiple times so there is no duplicates.
+2.
+Optionally, append the following code (to the code in the previous step) to delete any existing products in the collection.
+This helps if the application is run multiple times so there is no duplicates.
 
     ```javascript
     // Delete any existing products
@@ -43,7 +51,8 @@ There is more than one option when performing bulk operations in Cosmos DB for M
     await productCollection.deleteMany({});
     ```
 
-3. Append the following code (to the code in the previous step) to bulk load the product data into the collection:
+3.
+Append the following code (to the code in the previous step) to bulk load the product data into the collection:
 
     ```javascript
     var result = await productCollection.bulkWrite(
@@ -56,9 +65,11 @@ There is more than one option when performing bulk operations in Cosmos DB for M
     console.log(`${result.insertedCount} products inserted`);
     ```
 
-4. Save the `index.js` file.
+4.
+Save the `index.js` file.
 
-5. Run the application by executing the following command in the terminal window:
+5.
+Run the application by executing the following command in the terminal window:
 
     ```bash
     npm start
@@ -68,11 +79,13 @@ There is more than one option when performing bulk operations in Cosmos DB for M
 
 ## Bulk load of customer and sales data
 
-In this section, data will be loaded using the `insertMany` method. The `insertMany` method is used to insert multiple documents into a collection, it differs from the `bulkWrite` method in that it only supports insert operations.
+In this section, data will be loaded using the `insertMany` method.
+The `insertMany` method is used to insert multiple documents into a collection, it differs from the `bulkWrite` method in that it only supports insert operations.
 
 Customer data and sales data are also combined in a single JSON source, some pre-processing is required to separate the data into two separate collections.
 
-1. Open the `index.js` file, and directly beneath the code for adding products, append the following code to fetch the customer and sales data from the Cosmic Works repository:
+1.
+Open the `index.js` file, and directly beneath the code for adding products, append the following code to fetch the customer and sales data from the Cosmic Works repository:
 
     ```javascript
     // Load customer and sales data
@@ -84,7 +97,8 @@ Customer data and sales data are also combined in a single JSON source, some pre
                             .map(custSales => cleanData(custSales));
     ```
 
-2. Split the customer data from the sales data by appending the following code (to the code in the previous step):
+2.
+Split the customer data from the sales data by appending the following code (to the code in the previous step):
 
     ```javascript
     console.log("Split customer and sales data");
@@ -92,7 +106,8 @@ Customer data and sales data are also combined in a single JSON source, some pre
     const salesData = custSalesData.filter(sales => sales["type"] === "salesOrder");
     ```
 
-3. Append the following code (to the code in the previous step) to bulk load the customer data into the collection using the `insertMany` method:
+3.
+Append the following code (to the code in the previous step) to bulk load the customer data into the collection using the `insertMany` method:
 
     ```javascript
     console.log("Loading customer data");
@@ -101,7 +116,8 @@ Customer data and sales data are also combined in a single JSON source, some pre
     console.log(`${result.insertedCount} customers inserted`);
     ```
 
-4. Append the following code (to the code in the previous step) to bulk load the sales data into the collection using the `insertMany` method:
+4.
+Append the following code (to the code in the previous step) to bulk load the sales data into the collection using the `insertMany` method:
 
     ```javascript
     console.log("Loading sales data");
@@ -110,9 +126,11 @@ Customer data and sales data are also combined in a single JSON source, some pre
     console.log(`${result.insertedCount} sales inserted`);
     ```
 
-5. Save the `index.js` file.
+5.
+Save the `index.js` file.
 
-6. Run the application by executing the following command in the terminal window:
+6.
+Run the application by executing the following command in the terminal window:
 
     ```bash
     npm start
@@ -122,4 +140,5 @@ Customer data and sales data are also combined in a single JSON source, some pre
 
 ## Summary
 
-In this section bulk load operations were used to load product, customer, and sales data into Cosmos DB for MongoDB. Keep the database and its loaded data for use in subsequent labs.
+In this section bulk load operations were used to load product, customer, and sales data into Cosmos DB for MongoDB.
+Keep the database and its loaded data for use in subsequent labs.

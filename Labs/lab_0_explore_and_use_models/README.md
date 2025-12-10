@@ -2,7 +2,8 @@
 
 ## OpenAI Client Library
 
-When integrating Azure OpenAI service in a solution written in Node.js, the OpenAI NPM client library is used. This library is maintained by OpenAI, and is compatible with the Azure OpenAI service.
+When integrating Azure OpenAI service in a solution written in Node.js, the OpenAI NPM client library is used.
+This library is maintained by OpenAI, and is compatible with the Azure OpenAI service.
 
 Install the latest openai client library using `npm`:
 
@@ -40,7 +41,8 @@ const chatResponse = client.getChatCompletions(
     ]);
 ```
 
-The `.getCompletions` method returns a Javascript Promise object for asynchronous programming. In this example the next step is to call the `.then` method on the promise, passing it a function that writes the response from Azure OpenAI to the console.
+The `.getCompletions` method returns a Javascript Promise object for asynchronous programming.
+In this example the next step is to call the `.then` method on the promise, passing it a function that writes the response from Azure OpenAI to the console.
 
 ```javascript
 chatResponse.then((result) => {
