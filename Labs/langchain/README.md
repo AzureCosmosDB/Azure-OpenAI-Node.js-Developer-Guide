@@ -1,8 +1,8 @@
 # Lab - LangChain
 
-In the previous lab, the `mongodb` package was used to perform a vector search through a db command to find product documents that were most similar to the user's input. In this lab, you will use the LangChain package to perform the same search. LangChain has a vector store class named `AzureCosmosDBVectorStore`, a community contribution, that supports vector search in vCore-based Azure Cosmos DB for MongoDB.
+In the previous lab, the `mongodb` package was used to perform a vector search through a db command to find product documents that were most similar to the user's input. In this lab, you will use LangChain with a small custom retriever to perform the same search in vCore-based Azure Cosmos DB for MongoDB.
 
-The `AzureCosmosDBVectorStore` class represents a single vector index in the database, therefore for the instructions for this lab will focus on the `products` collection, however the same steps can be used with the `customers` and `sales` collections as well.
+The retriever represents a single vector index in the database, therefore the instructions for this lab focus on the `products` collection. The same steps can be used with the `customers` and `sales` collections as well.
 
 Throughout this lab, notice how much more concise the code is compared to the previous lab with the addition of LangChain.
 
@@ -51,7 +51,7 @@ This lab expects that data is already loaded into the Azure Cosmos DB API for Mo
 
 ## Vector search with LangChain
 
-The first step is to initialize the connection to the vector store. The `AzureCosmosDBVectorStore` class is used to represent the vector store. This section will walk through the initialization of this connection as well as a test call that issues a vector search and outputs the results.
+The first step is to initialize the retriever and issue a vector search to output the results.
 
 When establishing the connection to the vector store (vCore-based Azure Cosmos DB for MongoDB), recall that in the previous lab, each collection was populated and a `contentVector` field added that contains the vectorized embeddings of the document itself. Finally, a vector index was also created on the `contentVector` field to enable vector search. The vector index in each collection is named `VectorSearchIndex`.
 
@@ -59,39 +59,36 @@ The return value of a vector search in LangChain is a list of `Document` objects
 
 1. Open the `index.js` file in the Visual Studio Code editor.
 
-2. Directly beneath the line `const { MongoClient } = require('mongodb');`, add the following code to import the necessary LangChain packages. This code imports the AzureCosmosDBVectorStore that represents the vector index in a collection, the `AzureCosmosDBSimilarityType` that will allow us to perform a vector search using cosine similarity, and the `OpenAIEmbeddings` class that will be used to generate the embeddings for the user's input for the vector search.
+2. Directly beneath the line `const { MongoClient } = require('mongodb');`, add the following code to import the retriever and Azure OpenAI embeddings.
 
     ```javascript
-    const { AzureCosmosDBVectorStore,
-        AzureCosmosDBSimilarityType
-    } = require("@langchain/community/vectorstores/azure_cosmosdb")
-    const { OpenAIEmbeddings } = require("@langchain/openai")
+    const AzureCosmosDBRetriever = require("./azure_cosmosdb_retriever");
+    const { AzureOpenAIEmbeddings } = require("@langchain/openai");
     ```
 
-3. Directly beneath the line of code that sets up the MongoDB connection `const dbClient = new MongoClient(process.env.AZURE_COSMOSDB_CONNECTION_STRING);`, add the following code to initialize the connection to the vector store that points to the `products` collection and associated index. The `OpenAIEmbeddings` uses the default values obtained from the environment variables to initialize.
+3. Directly beneath the line of code that sets up the MongoDB connection `const dbClient = new MongoClient(process.env.AZURE_COSMOSDB_CONNECTION_STRING);`, add the following code to initialize the retriever for the `products` collection and associated vector index.
 
     ```javascript
-    // set up the Azure Cosmos DB vector store using the initialized MongoDB client
+    // Set up the Azure Cosmos DB retriever using the initialized MongoDB client
     const azureCosmosDBConfig = {
-        client: dbClient,
         databaseName: "cosmic_works",
         collectionName: "products",
-        indexName: "VectorSearchIndex",
         embeddingKey: "contentVector",
         textKey: "_id"
-    }
-    const vectorStore = new AzureCosmosDBVectorStore(new OpenAIEmbeddings(), azureCosmosDBConfig);
+    };
+    const embeddings = new AzureOpenAIEmbeddings({
+        azureOpenAIApiKey: process.env.AZURE_OPENAI_API_KEY,
+        azureOpenAIApiVersion: process.env.AZURE_OPENAI_API_VERSION,
+        azureOpenAIApiInstanceName: process.env.AZURE_OPENAI_API_INSTANCE_NAME,
+        azureOpenAIApiDeploymentName: process.env.AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME
+    });
+    const cosmosRetriever = new AzureCosmosDBRetriever(dbClient, embeddings, azureCosmosDBConfig);
     ```
 
-4. In the `main` function, directly beneath the line of code `console.log("Connected to MongoDB");`, append the following code that will perform a vector search using the `vectorStore` object and output the results.
+4. In the `main` function, directly beneath the line of code `console.log("Connected to MongoDB");`, append the following code to perform a vector search and output the results.
 
     ```javascript
-    // perform a vector search using the vector store
-    const results = await vectorStore.similaritySearch(
-        "What yellow products do you have?", 
-        AzureCosmosDBSimilarityType.CosineSimilarity, 
-        3
-    );
+    const results = await cosmosRetriever.invoke("What yellow products do you have?");
     console.log(results);
     ```
 
@@ -105,7 +102,7 @@ The return value of a vector search in LangChain is a list of `Document` objects
 
     The output will be a list of `Document` objects that contain the metadata of the documents that are most similar to the user's input.
 
-    >**Note**: The `Document` objects contain the `page_content` and `metadata` properties. The `page_content` is the `_id` field of the document, and the `metadata` contains all other fields of the document.
+    >**Note**: The `Document` objects contain `pageContent` and `metadata` properties. `pageContent` is the `_id` field of the document, and `metadata` contains the document fields.
 
     ![A portion of the console output shows search results with products that are similar to the user query.](media/initial_vector_search.png "Initial vector search results")
 
@@ -154,10 +151,10 @@ We'll also define a reusable RAG chain to control the flow and behavior of the c
     }
     ```
 
-3. In the `require("@langchain/openai")` import statement, add the `ChatOpenAI` class that will be used to interact with the LLM.
+3. In the `require("@langchain/openai")` import statement, add the `AzureChatOpenAI` class that will be used to interact with the LLM.
 
     ```javascript
-    const { OpenAIEmbeddings, ChatOpenAI } = require("@langchain/openai")
+    const { AzureOpenAIEmbeddings, AzureChatOpenAI } = require("@langchain/openai")
     ```
 
 4. Directly beneath the line of code that was just modified in the previous step, add the following:
@@ -172,8 +169,13 @@ We'll also define a reusable RAG chain to control the flow and behavior of the c
 5. Immediately before the `async function main()` function, add the following code to initialize an Azure OpenAI chat model.
 
     ```javascript
-    // set up the OpenAI chat model
-    const chatModel = new ChatOpenAI();
+    // Set up the Azure OpenAI chat model
+    const chatModel = new AzureChatOpenAI({
+        azureOpenAIApiKey: process.env.AZURE_OPENAI_API_KEY,
+        azureOpenAIApiVersion: process.env.AZURE_OPENAI_API_VERSION,
+        azureOpenAIApiInstanceName: process.env.AZURE_OPENAI_API_INSTANCE_NAME,
+        azureOpenAIApiDeploymentName: process.env.AZURE_OPENAI_API_DEPLOYMENT_NAME
+    });
     ```
 
 6. Before the last line of code in the file (that calls the main function), add the following function that creates a reusable LangChain RAG chain. The code is documented inline.
@@ -204,8 +206,8 @@ We'll also define a reusable RAG chain to control the flow and behavior of the c
             {question}
         `;
 
-        // Use a retriever on the Cosmos DB vector store
-        const retriever = vectorStore.asRetriever();
+        // Use the Cosmos DB retriever
+        const retriever = cosmosRetriever;
 
         // Initialize the prompt
         const prompt = PromptTemplate.fromTemplate(systemPrompt);
@@ -228,7 +230,7 @@ We'll also define a reusable RAG chain to control the flow and behavior of the c
     }
     ```
 
-7. In the `main` function, directly beneath the line of code `console.log('Connected to MongoDB');`, add the following code that will call the `ragLCELChain` function to perform a vector search using the `vectorStore` object and output the results.
+7. In the `main` function, directly beneath the line of code `console.log('Connected to MongoDB');`, add the following code that will call the `ragLCELChain` function to perform a vector search using the `cosmosRetriever` object and output the results.
 
     ```javascript
     console.log(await ragLCELChain("What yellow products do you have?"));
@@ -257,13 +259,12 @@ In this section, we'll implement a LangChain agent that will be used to interact
 2. Immediately after the `const { StringOutputParser } = require("@langchain/core/output_parsers");` line of code, add the following dependencies to support the creation of the LangChain agent:
 
     ```javascript
-    // For LangChain agent
+    // For the LangChain agent
     const { DynamicTool } = require("@langchain/core/tools");
-    const { AgentExecutor } = require("langchain/agents");
+    const { AgentExecutor } = require("@langchain/classic/agents");
     const { MessagesPlaceholder, ChatPromptTemplate } = require("@langchain/core/prompts");
-    const { convertToOpenAIFunction } = require("@langchain/core/utils/function_calling");
-    const { OpenAIFunctionsAgentOutputParser } = require("langchain/agents/openai/output_parser");
-    const { formatToOpenAIFunctionMessages } = require("langchain/agents/format_scratchpad");
+    const { OpenAIToolsAgentOutputParser } = require("@langchain/classic/agents/openai/output_parser");
+    const { formatToOpenAIToolMessages } = require("@langchain/classic/agents/format_scratchpad/openai_tools");
     ```
 
 3. Immediately before the last line of code in the file (that calls the main function), add the following function that builds a LangChain agent executor and a helper function that will invoke the agent. The code is documented inline.
@@ -288,8 +289,8 @@ In this section, we'll implement a LangChain agent that will be used to interact
                 respond with "I only answer questions about Cosmic Works"          
             `;
 
-        // Create vector store retriever chain to retrieve documents and formats them as a string for the prompt.
-        const retrieverChain = vectorStore.asRetriever().pipe(formatDocuments);
+        // Retrieve documents and format them as a string for the prompt.
+        const retrieverChain = cosmosRetriever.pipe(formatDocuments);
 
         // Define tools for the agent can use, the description is important this is what the AI will 
         // use to decide which tool to use.
@@ -320,20 +321,15 @@ In this section, we'll implement a LangChain agent that will be used to interact
             },
         });
 
-        // Generate OpenAI function metadata to provide to the LLM
-        // The LLM will use this metadata to decide which tool to use based on the description.
+        // Bind tools so the model can select the appropriate tool.
         const tools = [productsRetrieverTool, productLookupTool];
-        const modelWithFunctions = chatModel.bind({
-            functions: tools.map((tool) => convertToOpenAIFunction(tool)),
-        });
+        const modelWithTools = chatModel.bindTools(tools);
 
-        // OpenAI function calling is fine-tuned for tool using therefore you don't need to provide instruction.
-        // All that is required is that there be two variables: `input` and `agent_scratchpad`.
-        // Input represents the user prompt and agent_scratchpad acts as a log of tool invocations and outputs.
+        // The prompt contains the user input and accumulated tool-call messages.
         const prompt = ChatPromptTemplate.fromMessages([
             ["system", systemMessage],
             ["human", "{input}"],
-            new MessagesPlaceholder(variable_name="agent_scratchpad")
+            new MessagesPlaceholder("agent_scratchpad")
         ]);
 
         // Define the agent and executor
@@ -342,11 +338,11 @@ In this section, we'll implement a LangChain agent that will be used to interact
         const runnableAgent = RunnableSequence.from([  
             {  
                 input: (i) => i.input,  
-                agent_scratchpad: (i) => formatToOpenAIFunctionMessages(i.steps),  
+                agent_scratchpad: (i) => formatToOpenAIToolMessages(i.steps),
             },  
             prompt,  
-            modelWithFunctions,  
-            new OpenAIFunctionsAgentOutputParser(),
+            modelWithTools,
+            new OpenAIToolsAgentOutputParser(),
         ]);
 
         // An agent executor can be thought of as a runtime, it orchestrates the actions of the agent

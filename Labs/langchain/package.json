@@ -1,18 +1,20 @@
 {  
-  "name": "mongodb-nodejs-devguide-langchain",  
-  "version": "1.0.0",  
+  "name": "mongodb-nodejs-devguide-langchain",
+  "version": "1.0.0",
   "description": "A Node.js application that uses LangChain to perform RAG search and function calling.",
-  "main": "index.js",  
-  "scripts": {  
-    "start": "node index.js"  
-  },  
-  "dependencies": {  
-    "mongodb": "6.3.0",
-    "dotenv": "16.4.4",
-    "@azure/openai": "1.0.0-beta.11",
-    "langchain": "0.1.21",
-    "@langchain/community": "0.0.32"
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
   },
-  "author": "Microsoft",  
-  "license": "MIT"  
-}  
+  "dependencies": {
+    "@azure/openai": "1.0.0-beta.11",
+    "@langchain/classic": "1.0.57",
+    "@langchain/core": "1.3.2",
+    "@langchain/openai": "1.8.0",
+    "dotenv": "16.6.1",
+    "mongodb": "6.3.0",
+    "zod": "4.6.6"
+  },
+  "author": "Microsoft",
+  "license": "MIT"
+}
