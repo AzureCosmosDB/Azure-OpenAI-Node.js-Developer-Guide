@@ -1,15 +1,14 @@
 require('dotenv').config();
 const { MongoClient } = require('mongodb');
-const { AgentExecutor } = require("langchain/agents");
-const { OpenAIFunctionsAgentOutputParser } = require("langchain/agents/openai/output_parser");
-const { formatToOpenAIFunctionMessages } = require("langchain/agents/format_scratchpad");
+const { AgentExecutor } = require("@langchain/classic/agents");
+const { OpenAIToolsAgentOutputParser } = require("@langchain/classic/agents/openai/output_parser");
+const { formatToOpenAIToolMessages } = require("@langchain/classic/agents/format_scratchpad/openai_tools");
 const { DynamicTool } = require("@langchain/core/tools");
 const { RunnableSequence } = require("@langchain/core/runnables");
 const { HumanMessage, AIMessage } = require("@langchain/core/messages");
 const { MessagesPlaceholder, ChatPromptTemplate } = require("@langchain/core/prompts");
-const { convertToOpenAIFunction } = require("@langchain/core/utils/function_calling");
-const { ChatOpenAI, OpenAIEmbeddings } = require("@langchain/openai");
-const { AzureCosmosDBVectorStore } = require("@langchain/community/vectorstores/azure_cosmosdb");
+const { AzureChatOpenAI, AzureOpenAIEmbeddings } = require("@langchain/openai");
+const AzureCosmosDBRetriever = require("./azure_cosmosdb_retriever");
 
 class CosmicWorksAIAgent {
     constructor() {
@@ -24,11 +23,17 @@ class CosmicWorksAIAgent {
             embeddingKey: "contentVector",
             textKey: "_id"
         }
-        this.vectorStore = new AzureCosmosDBVectorStore(new OpenAIEmbeddings(), azureCosmosDBConfig);
+        const embeddings = new AzureOpenAIEmbeddings({
+            azureOpenAIApiKey: process.env.AZURE_OPENAI_API_KEY,
+            azureOpenAIApiVersion: process.env.AZURE_OPENAI_API_VERSION,
+            azureOpenAIApiInstanceName: process.env.AZURE_OPENAI_API_INSTANCE_NAME,
+            azureOpenAIApiDeploymentName: process.env.AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME
+        });
+        this.retriever = new AzureCosmosDBRetriever(this.dbClient, embeddings, azureCosmosDBConfig);
 
         // set up the OpenAI chat model
         // https://js.langchain.com/docs/integrations/chat/azure
-        this.chatModel = new ChatOpenAI({
+        this.chatModel = new AzureChatOpenAI({
             temperature: 0,
             azureOpenAIApiKey: process.env.AZURE_OPENAI_API_KEY,
             azureOpenAIApiVersion: process.env.AZURE_OPENAI_API_VERSION,
@@ -93,7 +98,7 @@ class CosmicWorksAIAgent {
             respond with "I only answer questions about Cosmic Works"          
         `;
         // Create vector store retriever chain to retrieve documents and formats them as a string for the prompt.
-        const retrieverChain = this.vectorStore.asRetriever().pipe(this.formatDocuments);
+        const retrieverChain = this.retriever.pipe(this.formatDocuments);
 
         // Define tools for the agent can use, the description is important this is what the AI will 
         // use to decide which tool to use.
@@ -127,9 +132,7 @@ class CosmicWorksAIAgent {
         // Generate OpenAI function metadata to provide to the LLM
         // The LLM will use this metadata to decide which tool to use based on the description.
         const tools = [productsRetrieverTool, productLookupTool];
-        const modelWithFunctions = this.chatModel.bind({
-            functions: tools.map((tool) => convertToOpenAIFunction(tool)),
-        });
+        const modelWithTools = this.chatModel.bindTools(tools);
 
         // OpenAI function calling is fine-tuned for tool using therefore you don't need to provide instruction.
         // All that is required is that there be two variables: `input` and `agent_scratchpad`.
@@ -147,12 +150,12 @@ class CosmicWorksAIAgent {
         const runnableAgent = RunnableSequence.from([
             {
                 input: (i) => i.input,
-                agent_scratchpad: (i) => formatToOpenAIFunctionMessages(i.steps),
+                agent_scratchpad: (i) => formatToOpenAIToolMessages(i.steps),
                 chat_history: (i) => i.chat_history
             },
             prompt,
-            modelWithFunctions,
-            new OpenAIFunctionsAgentOutputParser(),
+            modelWithTools,
+            new OpenAIToolsAgentOutputParser(),
         ]);
 
         // An agent executor can be thought of as a runtime, it orchestrates the actions of the agent
